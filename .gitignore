@@ -1,0 +1,13 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# ML Files generated (on veut éviter de versionner les gros binaires et logs locaux)
+models/*.joblib
+reports/*.json
+reports/*.txt
+mlruns/
+
+# System specific
+.DS_Store
+

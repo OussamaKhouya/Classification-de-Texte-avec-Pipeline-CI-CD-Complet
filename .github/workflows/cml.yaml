@@ -1,0 +1,59 @@
+name: CML Report
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      members: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Setup CML
+        uses: iterative/setup-cml@v1
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Preprocess Data
+        run: |
+          python src/preprocess.py
+
+      - name: Train Model
+        run: |
+          python src/train.py
+
+      - name: Write CML Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Création du rapport Markdown
+          echo "# Rapport de Classification Textuelle" > report.md
+          echo "## Métriques et Performance" >> report.md
+          
+          echo "### Classification Report" >> report.md
+          echo "\`\`\`" >> report.md
+          cat reports/classification_report.txt >> report.md
+          echo "\`\`\`" >> report.md
+          
+          echo "### Métriques JSON" >> report.md
+          echo "\`\`\`json" >> report.md
+          cat reports/metrics.json >> report.md
+          echo "\`\`\`" >> report.md
+          
+          # Envoi du commentaire via CML
+          cml comment create report.md
