@@ -1,0 +1,15 @@
+flowchart TB
+    A["Lecture des CSV train et test"]
+    C["Vectorisation TF-IDF (fit sur train)"]
+    D["Transformation TF-IDF du test"]
+    E["Entraînement du RandomForestClassifier"]
+    F["Prédiction sur le jeu de test"]
+    G["Calcul des métriques (accuracy, precision, recall, F1)"]
+    H["Génération du rapport texte et de la matrice de confusion"]
+    I["Sauvegarde de model.joblib et tfidf_vectorizer.joblib"]
+    J["Logging des métriques et artefacts dans MLflow"]
+
+    A --> B --> D --> E --> F --> G --> H
+    G --> I
+    G --> J
+

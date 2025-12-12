@@ -2,6 +2,9 @@
 __pycache__/
 *.pyc
 
+# Virtual environment
+.venv/
+
 # ML Files generated (on veut éviter de versionner les gros binaires et logs locaux)
 models/*.joblib
 reports/*.json

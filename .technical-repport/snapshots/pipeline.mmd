@@ -1,0 +1,42 @@
+flowchart TD
+    %% =======================
+    %% Styles
+    %% =======================
+    classDef data fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px,color:#0D47A1
+    classDef process fill:#E8F5E9,stroke:#43A047,stroke-width:2px,color:#1B5E20
+    classDef split fill:#FFF3E0,stroke:#FB8C00,stroke-width:2px,color:#E65100
+    classDef save fill:#FCE4EC,stroke:#D81B60,stroke-width:2px,color:#880E4F
+
+    %% =======================
+    %% Nodes
+    %% =======================
+    A["📥 Chargement du jeu<br/>20 Newsgroups"]
+    B["🗂️ Construction du DataFrame<br/><i>colonnes : texte, cible</i>"]
+    
+    C["🧹 Nettoyage du texte<br/>• minuscules<br/>• suppression ponctuation<br/>• suppression chiffres"]
+    D["🔤 Traitement NLP<br/>• tokenisation<br/>• retrait stopwords<br/>• lemmatisation"]
+    E["🚫 Filtrage des textes vides"]
+
+    F["✂️ Séparation des données<br/>Train / Temporaire<br/><b>Stratification par cible</b>"]
+    G["🔀 Séparation Temporaire<br/>Validation / Test"]
+
+    H["💾 Sauvegarde<br/>train.csv"]
+    I["💾 Sauvegarde<br/>validation.csv"]
+    J["💾 Sauvegarde<br/>test.csv"]
+
+    %% =======================
+    %% Flow
+    %% =======================
+    A --> B --> C --> D --> E --> F
+    F --> H
+    F --> G
+    G --> I
+    G --> J
+
+    %% =======================
+    %% Classes
+    %% =======================
+    class A,B data
+    class C,D,E process
+    class F,G split
+    class H,I,J save
