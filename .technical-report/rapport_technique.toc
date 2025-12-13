@@ -1,0 +1,19 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Architecture globale}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Organisation des répertoires}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Pipeline de données}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Entraînement et évaluation du modèle}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Service d'inférence}{4}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Pipeline CI/CD}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Build, tests et image Docker}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Rapport automatique avec CML}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Déploiement staging $\rightarrow $ production}{5}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Choix techniques}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Stack machine learning}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Stack applicative et DevOps}{6}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Limites et axes d'amélioration}{6}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Limites du modèle et des données}{6}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Limites MLOps / CI/CD}{7}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Sécurité, robustesse et industrialisation}{7}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Conclusion}{7}{section.6}%
