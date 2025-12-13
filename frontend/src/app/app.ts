@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -6,6 +6,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 interface PredictionResponse {
   text: string;
   prediction_class_id: number;
+  category_name?: string;
+  confidence_scores?: { name: string; value: number }[];
   status: string;
 }
 
@@ -66,7 +68,7 @@ export class App {
 
   private apiUrl = 'http://localhost:8000';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private ngZone: NgZone) {
     this.checkApiStatus();
   }
 
@@ -95,6 +97,12 @@ export class App {
   getCategoryIcon(classId: number): string {
     const category = this.getClassName(classId);
     return this.categoryIcons[category] || '📄';
+  }
+
+  getConfidenceColor(score: number): string {
+    if (score >= 0.7) return 'var(--success-color, #4caf50)'; // Vert
+    if (score >= 0.4) return 'var(--warning-color, #ff9800)'; // Orange
+    return 'var(--danger-color, #f44336)'; // Rouge
   }
 
   // File upload
@@ -154,13 +162,19 @@ export class App {
 
     this.http.post<PredictionResponse>(`${this.apiUrl}/predict`, { text: this.inputText }).subscribe({
       next: (response) => {
-        this.prediction = response;
-        this.isLoading = false;
+        this.ngZone.run(() => {
+          console.log('Response received:', response);
+          this.prediction = response;
+          this.isLoading = false;
+          console.log('isLoading:', this.isLoading, 'prediction:', this.prediction);
+        });
       },
       error: (err) => {
-        this.error = 'Erreur lors de la classification. Vérifiez que l\'API est en ligne.';
-        this.isLoading = false;
-        console.error(err);
+        this.ngZone.run(() => {
+          console.error('Error:', err);
+          this.error = 'Erreur lors de la classification. Vérifiez que l\'API est en ligne.';
+          this.isLoading = false;
+        });
       }
     });
   }

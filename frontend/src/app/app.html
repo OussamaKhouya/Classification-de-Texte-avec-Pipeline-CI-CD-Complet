@@ -44,13 +44,38 @@
     </div>
 
     <!-- Result Section -->
+
     <section *ngIf="prediction" class="result-section">
       <h2>Résultat de l'analyse</h2>
 
       <div class="result-card">
         <div class="result-main">
-          <span class="category-icon">{{ getCategoryIcon(prediction.prediction_class_id) }}</span>
-          <span class="category-name">{{ getClassName(prediction.prediction_class_id) }}</span>
+          <!-- Utiliser la catégorie avec le plus haut score si disponible -->
+          <ng-container
+            *ngIf="prediction.confidence_scores && prediction.confidence_scores.length > 0; else defaultResult">
+            <span class="category-icon">{{ categoryIcons[prediction.confidence_scores[0].name] || '📄' }}</span>
+            <span class="category-name">{{ prediction.confidence_scores[0].name }}</span>
+          </ng-container>
+
+          <ng-template #defaultResult>
+            <span class="category-icon">{{ getCategoryIcon(prediction.prediction_class_id) }}</span>
+            <span class="category-name">{{ prediction.category_name || getClassName(prediction.prediction_class_id)
+              }}</span>
+          </ng-template>
+        </div>
+
+        <div class="confidence-bars" *ngIf="prediction.confidence_scores">
+          <div class="confidence-item" *ngFor="let score of prediction.confidence_scores.slice(0, 3)">
+            <div class="confidence-label">
+              <span>{{ score.name }}</span>
+              <span [style.color]="getConfidenceColor(score.value)">{{ (score.value * 100).toFixed(1) }}%</span>
+            </div>
+            <div class="progress-bg">
+              <div class="progress-fill" [style.width.%]="score.value * 100"
+                [style.background]="getConfidenceColor(score.value)">
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="result-status">

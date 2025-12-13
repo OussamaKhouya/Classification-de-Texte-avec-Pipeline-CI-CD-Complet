@@ -68,6 +68,30 @@ app.add_middleware(
 class TextRequest(BaseModel):
     text: str
 
+# Mapping des classes vers catégories simplifiées
+CATEGORY_NAMES = {
+    0: 'Religion',
+    1: 'Informatique',
+    2: 'Informatique',
+    3: 'Informatique',
+    4: 'Informatique',
+    5: 'Informatique',
+    6: 'Commerce',
+    7: 'Automobile',
+    8: 'Automobile',
+    9: 'Sport',
+    10: 'Sport',
+    11: 'Science',
+    12: 'Science',
+    13: 'Science',
+    14: 'Science',
+    15: 'Religion',
+    16: 'Politique',
+    17: 'Politique',
+    18: 'Politique',
+    19: 'Religion'
+}
+
 # Fonction helper pour extraire le texte des fichiers
 def extract_text_from_file(file: UploadFile) -> str:
     filename = file.filename.lower()
@@ -106,15 +130,48 @@ def predict(request: TextRequest):
         vectorized_txt = artifacts['vectorizer'].transform([processed_txt])
         
         # 3. Prédiction
+        print("Début prédiction...")
         prediction = artifacts['model'].predict(vectorized_txt)
+        print(f"Prediction result: {prediction}")
+        
+        try:
+            probabilities = artifacts['model'].predict_proba(vectorized_txt)[0]
+            print(f"Probabilties shape: {probabilities.shape}")
+            print(f"Probabilities: {probabilities}")
+        except Exception as prob_error:
+            print(f"Erreur lors de predict_proba: {prob_error}")
+            # Fallback si predict_proba échoue (ex: modèle SVM sans proba)
+            probabilities = [0.0] * 20
+            probabilities[int(prediction[0])] = 1.0
+
+        class_id = int(prediction[0])
+        print(f"Class ID: {class_id}")
+        
+        # Agréger les probabilités par catégorie simplifiée
+        category_probs = {}
+        for idx, prob in enumerate(probabilities):
+            cat_name = CATEGORY_NAMES.get(idx, f"Classe {idx}")
+            category_probs[cat_name] = category_probs.get(cat_name, 0.0) + prob
+            
+        print("Probabilités agrégées:", category_probs)
+
+        # Convertir en liste triée
+        sorted_probs = [
+            {"name": k, "value": round(v, 4)} 
+            for k, v in sorted(category_probs.items(), key=lambda item: item[1], reverse=True)
+        ]
         
         # Retour
         return {
             "text": request.text[:200] + "..." if len(request.text) > 200 else request.text,
-            "prediction_class_id": int(prediction[0]),
+            "prediction_class_id": class_id,
+            "category_name": CATEGORY_NAMES.get(class_id, f"Classe {class_id}"),
+            "confidence_scores": sorted_probs,
             "status": "success"
         }
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 # Endpoint de prédiction par fichier
@@ -139,11 +196,27 @@ async def upload_file(file: UploadFile = File(...)):
         
         # 4. Prédiction
         prediction = artifacts['model'].predict(vectorized_txt)
+        probabilities = artifacts['model'].predict_proba(vectorized_txt)[0]
+        class_id = int(prediction[0])
+
+        # Agréger les probabilités par catégorie simplifiée
+        category_probs = {}
+        for idx, prob in enumerate(probabilities):
+            cat_name = CATEGORY_NAMES.get(idx, f"Classe {idx}")
+            category_probs[cat_name] = category_probs.get(cat_name, 0.0) + prob
+
+        # Convertir en liste triée
+        sorted_probs = [
+            {"name": k, "value": round(v, 4)} 
+            for k, v in sorted(category_probs.items(), key=lambda item: item[1], reverse=True)
+        ]
         
         return {
             "filename": file.filename,
             "text_preview": text[:200] + "..." if len(text) > 200 else text,
-            "prediction_class_id": int(prediction[0]),
+            "prediction_class_id": class_id,
+            "category_name": CATEGORY_NAMES.get(class_id, f"Classe {class_id}"),
+            "confidence_scores": sorted_probs,
             "status": "success"
         }
     except ValueError as e:

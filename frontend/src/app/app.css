@@ -377,6 +377,40 @@
   color: var(--accent-blue);
 }
 
+/* Confidence Bars */
+.confidence-bars {
+  width: 100%;
+  max-width: 500px;
+  margin: 1.5rem auto 0;
+  text-align: left;
+}
+
+.confidence-item {
+  margin-bottom: 1rem;
+}
+
+.confidence-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.progress-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--secondary-purple));
+  border-radius: 4px;
+  transition: width 1s ease-out;
+}
+
 .result-status {
   color: var(--text-muted);
   font-size: 0.875rem;
