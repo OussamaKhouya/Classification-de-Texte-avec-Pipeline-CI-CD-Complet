@@ -1,0 +1,12 @@
+flowchart LR
+    A["Workflow Docker Build & Push terminé (succès)"]
+    B["GitHub Actions : workflow Deploy Pipeline"]
+    C["Job deploy-staging : pull de l'image et lancement du conteneur"]
+    D["Tests d'intégration sur /health et /predict"]
+    E["Validation de l'accuracy et de l'état du modèle"]
+    F["Job deploy-production : déploiement en production si validation OK"]
+    G["Job rollback : restauration et création d'un ticket GitHub en cas d'échec"]
+
+    A --> B --> C --> D --> E --> F
+    E -->|échec| G
+

@@ -1,0 +1,9 @@
+flowchart LR
+    A["Push ou pull request vers master"]
+    B["GitHub Actions : workflow Docker Build & Push"]
+    C["Build & tests (prétraitement, entraînement, pytest)"]
+    D["Construction de l'image Docker"]
+    E["Push de l'image vers GitHub Container Registry"]
+
+    A --> B --> C --> D --> E
+

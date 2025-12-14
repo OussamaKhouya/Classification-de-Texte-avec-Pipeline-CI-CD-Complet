@@ -1,0 +1,45 @@
+flowchart LR
+    %% =======================
+    %% Styles
+    %% =======================
+    classDef data fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px,color:#0D47A1
+    classDef vector fill:#E8F5E9,stroke:#43A047,stroke-width:2px,color:#1B5E20
+    classDef model fill:#FFFDE7,stroke:#FBC02D,stroke-width:2px,color:#F57F17
+    classDef eval fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px,color:#4A148C
+    classDef save fill:#FCE4EC,stroke:#D81B60,stroke-width:2px,color:#880E4F
+    classDef mlops fill:#E0F7FA,stroke:#00838F,stroke-width:2px,color:#004D40
+
+    %% =======================
+    %% Nodes
+    %% =======================
+    A["📂 Lecture des fichiers CSV<br/>train.csv & test.csv"]
+
+    B["🧮 Vectorisation TF-IDF<br/><i>fit uniquement sur train</i>"]
+    C["🔁 Transformation TF-IDF<br/>du jeu de test"]
+
+    D["🌲 Entraînement du modèle<br/>RandomForestClassifier"]
+    E["🔮 Prédiction sur le jeu de test"]
+
+    F["📊 Calcul des métriques<br/>• Accuracy<br/>• Precision<br/>• Recall<br/>• F1-score"]
+    G["📝 Génération des résultats<br/>• Rapport de classification<br/>• Matrice de confusion"]
+
+    H["💾 Sauvegarde des artefacts<br/>model.joblib<br/>tfidf_vectorizer.joblib"]
+    I["📈 Logging MLOps<br/>Métriques & artefacts<br/>dans MLflow"]
+
+    %% =======================
+    %% Flow
+    %% =======================
+    A --> B --> C --> D --> E --> F --> G
+    F --> H
+    F --> I
+
+    %% =======================
+    %% Classes
+    %% =======================
+    class A data
+    class B,C vector
+    class D,E model
+    class F,G eval
+    class H save
+    class I mlops
+

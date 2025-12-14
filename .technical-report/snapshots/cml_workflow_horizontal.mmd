@@ -1,0 +1,10 @@
+flowchart LR
+    A["Push ou pull request vers master"]
+    B["GitHub Actions : workflow CML Report"]
+    C["Prétraitement et entraînement<br/>(src/preprocess.py, src/train.py)"]
+    D["Génération des fichiers de rapport<br/>(metrics.json, classification_report.txt, confusion_matrix.png)"]
+    E["Création de report.md"]
+    F["Publication du rapport en commentaire<br/>sur la pull request (cml comment create)"]
+
+    A --> B --> C --> D --> E --> F
+
