@@ -4,8 +4,20 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{graphicx}
+\usepackage{xcolor}
 
-\usetheme{Madrid}
+% Thème et couleurs personnalisés
+\usetheme{CambridgeUS}
+\usecolortheme{seahorse}
+\usefonttheme{professionalfonts}
+
+\definecolor{DevOpsBlue}{RGB}{25,118,210}
+\setbeamercolor{structure}{fg=DevOpsBlue}
+\setbeamercolor{frametitle}{bg=DevOpsBlue!10, fg=black}
+\setbeamercolor{title}{fg=DevOpsBlue}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
 
 \title{Classification de texte avec pipeline CI/CD complet}
 \subtitle{Projet DevOps \& MLOps}
