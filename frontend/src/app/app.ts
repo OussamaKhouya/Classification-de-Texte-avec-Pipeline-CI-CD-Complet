@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 interface PredictionResponse {
   text: string;
@@ -66,7 +67,7 @@ export class App {
     'Politique': '🏛️'
   };
 
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.checkApiStatus();

@@ -105,15 +105,59 @@ jobs:
             exit 1
           fi
 
+      - name: Setup Node for Angular build
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build Angular frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload Angular dist to Oracle server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "frontend/dist/frontend/browser/*"
+          target: "/home/${{ secrets.SSH_USER }}/frontend-dist"
+
       - name: Deploy to Production
         run: |
           echo "Déploiement en PRODUCTION..."
           echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-          echo "Production déployée avec succès!"
-          
-          # Ici, on ajouterait les commandes pour déployer sur un vrai serveur
-          # Exemple: kubectl apply -f k8s/deployment.yaml
-          # Ou: ssh user@server 'docker pull ... && docker-compose up -d'
+          echo "Lancement du déploiement sur le serveur Oracle Cloud..."
+
+      - name: Deploy to Production server (Oracle Cloud)
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            # Met à jour le backend (API FastAPI)
+            docker stop app || true
+            docker rm app || true
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            docker run -d --restart unless-stopped \
+              -p 8000:8000 \
+              --name app \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+            # Installe et configure Nginx pour servir le frontend Angular
+            sudo apt-get update
+            sudo apt-get install -y nginx
+            sudo rm -rf /var/www/html/*
+            sudo mkdir -p /var/www/html
+            sudo cp -r ~/frontend-dist/* /var/www/html/
+            sudo chown -R www-data:www-data /var/www/html
+            sudo systemctl enable nginx
+            sudo systemctl restart nginx
 
       - name: Tag as Production Release
         run: |

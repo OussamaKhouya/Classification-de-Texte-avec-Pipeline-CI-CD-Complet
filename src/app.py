@@ -58,7 +58,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200", "http://127.0.0.1:4200"],
+    allow_origins=[
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "http://80.225.186.34",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -227,4 +231,3 @@ async def upload_file(file: UploadFile = File(...)):
 @app.get("/health")
 def health_check():
     return {"status": "ok", "model_loaded": 'model' in artifacts}
-
