@@ -7,9 +7,14 @@ on:
       - completed
     branches: [master]
 
+permissions:
+  contents: read
+  packages: read
+  issues: write
+
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: akrambenhammou-e/classification-texte-pipeline-ci-cd
+  IMAGE_NAME: ${{ github.repository }}
   MIN_ACCURACY: 0.5  # Seuil minimum pour déployer en production
 
 jobs:
