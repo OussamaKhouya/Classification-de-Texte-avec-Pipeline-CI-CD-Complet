@@ -27,7 +27,7 @@ def main():
     test_df = test_df.dropna(subset=['processed_text'])
 
     # Paramètres du modèle
-    MAX_FEATURES = 5000
+    MAX_FEATURES = 10000
     N_ESTIMATORS = 100
     
     # Démarrage du run MLflow
