@@ -28,7 +28,7 @@ def main():
 
     # Paramètres du modèle
     MAX_FEATURES = 10000
-    N_ESTIMATORS = 100
+    N_ESTIMATORS = 200
     
     # Démarrage du run MLflow
     with mlflow.start_run() as run:
