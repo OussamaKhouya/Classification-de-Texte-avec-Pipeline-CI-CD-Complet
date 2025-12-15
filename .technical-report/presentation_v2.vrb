@@ -1,0 +1,29 @@
+\frametitle{Démonstration - Docker en Local}
+\textbf{\faDocker\ Lancer l'application conteneurisée}
+
+    \vspace{0.1cm}
+
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{\scriptsize 1. Pull \& Run}
+            \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+docker pull ghcr.io/akrambenhammou-e/\
+  classification-texte-pipeline-ci-cd:latest
+docker run -d -p 8000:8000 --name app \
+  ghcr.io/.../...:latest
+            \end{lstlisting}
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{block}{\scriptsize 2. Tester l'API}
+            \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+# Health check
+curl http://localhost:8000/health
+
+# Prediction
+curl -X POST localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text": "GPU NVIDIA gaming"}'
+            \end{lstlisting}
+        \end{block}
+    \end{columns}

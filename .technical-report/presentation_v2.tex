@@ -1,0 +1,1037 @@
+% =============================================================================
+% PRÉSENTATION MLOps - Classification de Texte
+% Auteurs: Akram BENHAMMOU & Oussama KHOUYA
+% Master 2 - DevOps & Machine Learning
+% =============================================================================
+
+\documentclass[aspectratio=169, 10pt]{beamer}
+\setbeamersize{text margin left=10pt,text margin right=10pt}
+
+% ============ PACKAGES ============
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{fontawesome5}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{multirow}
+
+% ============ THÈME MODERNE PREMIUM ============
+\usetheme{default}
+\useinnertheme{rounded}
+
+% ============ PALETTE DE COULEURS MODERNE ============
+% Palette principale - Bleu professionnel avec accents vibrants
+\definecolor{primaryDark}{RGB}{15, 23, 42}        % Slate 900 - Fond principal
+\definecolor{primaryMid}{RGB}{30, 41, 59}         % Slate 800 - Fond secondaire
+\definecolor{primaryLight}{RGB}{51, 65, 85}       % Slate 700 - Éléments subtils
+
+% Couleurs d'accent modernes
+\definecolor{accentCyan}{RGB}{6, 182, 212}        % Cyan 500 - Accent principal
+\definecolor{accentTeal}{RGB}{20, 184, 166}       % Teal 500 - Accent secondaire
+\definecolor{accentIndigo}{RGB}{99, 102, 241}     % Indigo 500 - Accent tertiaire
+
+% Couleurs sémantiques pour DevOps/MLOps
+\definecolor{devopsOrange}{RGB}{251, 146, 60}     % Orange 400 - DevOps
+\definecolor{mlopsGreen}{RGB}{74, 222, 128}       % Green 400 - MLOps
+\definecolor{dockerBlue}{RGB}{56, 189, 248}       % Sky 400 - Docker
+\definecolor{githubPurple}{RGB}{167, 139, 250}    % Violet 400 - GitHub
+
+% Couleurs de fond et texte
+\definecolor{bgLight}{RGB}{248, 250, 252}         % Slate 50 - Fond clair
+\definecolor{bgCard}{RGB}{241, 245, 249}          % Slate 100 - Cartes
+\definecolor{textDark}{RGB}{15, 23, 42}           % Slate 900 - Texte principal
+\definecolor{textMuted}{RGB}{100, 116, 139}       % Slate 500 - Texte secondaire
+
+% ============ APPLICATION DU THÈME ============
+% Cadre et titres
+\setbeamercolor{frametitle}{fg=white,bg=primaryDark}
+\setbeamercolor{framesubtitle}{fg=accentCyan}
+
+% Structure générale
+\setbeamercolor{structure}{fg=accentCyan}
+\setbeamercolor{normal text}{fg=textDark,bg=bgLight}
+\setbeamercolor{alerted text}{fg=devopsOrange}
+\setbeamercolor{example text}{fg=mlopsGreen}
+
+% Palette de navigation
+\setbeamercolor{palette primary}{bg=primaryDark,fg=white}
+\setbeamercolor{palette secondary}{bg=primaryMid,fg=white}
+\setbeamercolor{palette tertiary}{bg=accentCyan,fg=primaryDark}
+\setbeamercolor{palette quaternary}{bg=accentIndigo,fg=white}
+
+% Blocs stylisés
+\setbeamercolor{block title}{bg=accentCyan,fg=primaryDark}
+\setbeamercolor{block body}{bg=bgCard,fg=textDark}
+\setbeamercolor{block title alerted}{bg=devopsOrange,fg=primaryDark}
+\setbeamercolor{block body alerted}{bg=bgCard,fg=textDark}
+\setbeamercolor{block title example}{bg=mlopsGreen,fg=primaryDark}
+\setbeamercolor{block body example}{bg=bgCard,fg=textDark}
+
+% Items et puces
+\setbeamercolor{item}{fg=accentCyan}
+\setbeamercolor{subitem}{fg=accentTeal}
+\setbeamercolor{itemize item}{fg=accentCyan}
+\setbeamercolor{itemize subitem}{fg=accentTeal}
+\setbeamercolor{enumerate item}{fg=accentCyan}
+
+% Page de titre
+\setbeamercolor{title}{fg=white,bg=primaryDark}
+\setbeamercolor{subtitle}{fg=accentCyan}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{institute}{fg=accentTeal}
+\setbeamercolor{date}{fg=textMuted}
+
+% Footer élégant
+\setbeamercolor{footline}{fg=textMuted,bg=bgLight}
+
+% ============ TYPOGRAPHIE MODERNE ============
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize,series=\mdseries}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small,series=\mdseries}
+\setbeamerfont{block title}{size=\normalsize,series=\bfseries}
+\setbeamerfont{author}{size=\normalsize,series=\mdseries}
+\setbeamerfont{institute}{size=\small}
+\setbeamerfont{date}{size=\small}
+
+% ============ TEMPLATES PERSONNALISÉS ============
+% Supprimer les éléments de navigation par défaut
+\setbeamertemplate{navigation symbols}{}
+
+% Footer minimaliste avec numéro de page
+\setbeamertemplate{footline}{
+    \hfill\usebeamercolor[fg]{footline}\insertframenumber\,/\,\inserttotalframenumber\hspace*{4pt}\vskip4pt
+}
+
+% Puces modernes
+\setbeamertemplate{itemize item}{\textcolor{accentCyan}{\faChevronRight}}
+\setbeamertemplate{itemize subitem}{\textcolor{accentTeal}{\faAngleRight}}
+\setbeamertemplate{itemize subsubitem}{\textcolor{textMuted}{\textbullet}}
+
+% Numérotation colorée
+\setbeamertemplate{enumerate item}{\textcolor{accentCyan}{\insertenumlabel.}}
+
+% Blocs arrondis avec ombre
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+% ============ STYLE DES LISTINGS (CODE) ============
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    backgroundcolor=\color{bgCard},
+    frame=l,
+    framesep=10pt,
+    framerule=3pt,
+    rulecolor=\color{accentCyan},
+    keywordstyle=\color{accentIndigo}\bfseries,
+    commentstyle=\color{textMuted}\itshape,
+    stringstyle=\color{mlopsGreen},
+    breaklines=true,
+    showstringspaces=false,
+    numbers=none,
+    xleftmargin=15pt
+}
+
+% ============ INFORMATIONS ============
+\title[MLOps Pipeline]{{\textbf{Pipeline MLOps Complet}\\Classification Automatique de Texte}}
+\subtitle{GitHub Actions • Docker • MLflow • CML • FastAPI • Angular}
+
+\author[BENHAMMOU \& KHOUYA]{%
+\textbf{Réalisé par :}\\
+Akram BENHAMMOU \&
+Oussama KHOUYA
+}
+
+\institute[M2 DevOps]{MLOPS \& DEVOPS}
+\date{15/12/2025}
+
+\begin{document}
+
+
+% -----------------------------------------------------------------------------
+% SLIDE 1: PAGE DE TITRE
+% -----------------------------------------------------------------------------
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 2: SOMMAIRE
+% -----------------------------------------------------------------------------
+\begin{frame}{Sommaire}
+    \tableofcontents
+\end{frame}
+
+% =============================================================================
+\section{Introduction \& Contexte}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 3: CONTEXTE
+% -----------------------------------------------------------------------------
+\begin{frame}{Contexte du Projet}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Problématique}
+            Comment automatiser le cycle de vie complet d'un modèle de Machine Learning, de l'entraînement au déploiement en production ?
+        \end{block}
+        
+        \vspace{0.3cm}
+        
+        \textbf{Cas d'usage :} Classification automatique d'articles de journaux
+        
+        \vspace{0.3cm}
+        
+        \begin{alertblock}{Objectifs du projet}
+            \begin{itemize}
+                \item[\faCheckCircle] Pipeline \textbf{CI/CD} automatisé
+                \item[\faCheckCircle] Tracking d'expériences \textbf{MLflow}
+                \item[\faCheckCircle] Conteneurisation \textbf{Docker}
+                \item[\faCheckCircle] Déploiement \textbf{Staging → Production}
+            \end{itemize}
+        \end{alertblock}
+        
+        \column{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[node distance=1.5cm]
+            \node[draw, fill=devopsOrange!30, rounded corners, minimum width=3.5cm, minimum height=0.9cm, font=\small] (push) {\faCode\ Code Push};
+            \node[draw, fill=githubPurple!30, rounded corners, minimum width=3.5cm, minimum height=0.9cm, font=\small, below of=push] (actions) {\faGithub\ GitHub Actions};
+            \node[draw, fill=dockerBlue!30, rounded corners, minimum width=3.5cm, minimum height=0.9cm, font=\small, below of=actions] (docker) {\faDocker\ Docker Image};
+            \node[draw, fill=mlopsGreen!30, rounded corners, minimum width=3.5cm, minimum height=0.9cm, font=\small, below of=docker] (prod) {\faRocket\ Production};
+            
+            \draw[->, thick, accentCyan] (push) -- (actions);
+            \draw[->, thick, accentCyan] (actions) -- (docker);
+            \draw[->, thick, accentCyan] (docker) -- (prod);
+        \end{tikzpicture}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 4: LES 7 CATÉGORIES
+% -----------------------------------------------------------------------------
+\begin{frame}{Les 7 Catégories de Classification}
+    \centering
+    \begin{tabular}{ccc}
+        \colorbox{accentCyan!30}{\makebox[3cm]{\faLaptop\ Informatique}} &
+        \colorbox{green!30}{\makebox[3cm]{\faFutbol\ Sport}} &
+        \colorbox{yellow!30}{\makebox[3cm]{\faFlask\ Science}} \\[0.5cm]
+        \colorbox{red!30}{\makebox[3cm]{\faLandmark\ Politique}} &
+        \colorbox{purple!30}{\makebox[3cm]{\faChurch\ Religion}} &
+        \colorbox{orange!30}{\makebox[3cm]{\faCar\ Automobile}} \\[0.5cm]
+        \multicolumn{3}{c}{\colorbox{cyan!30}{\makebox[3cm]{\faShoppingCart\ Commerce}}}
+    \end{tabular}
+    
+    \vspace{0.8cm}
+    
+    \begin{block}{Dataset : 20 Newsgroups}
+        \begin{itemize}
+            \item \textbf{18,846 articles} répartis en 20 classes originales
+            \item Regroupement en \textbf{7 catégories} pour simplification
+            \item Split : 80\% entraînement / 20\% test
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% =============================================================================
+\section{Architecture Technique}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 5: ARCHITECTURE GLOBALE
+% -----------------------------------------------------------------------------
+\begin{frame}{Architecture Globale du Système}
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.2cm,
+        box/.style={draw, rounded corners, fill=#1, minimum width=2.2cm, minimum height=1cm, align=center, font=\small},
+        arrow/.style={->, thick, accentCyan}
+    ]
+        % Layer 1: Data & ML
+        \node[box=yellow!20] (data) at (0,0) {\faDatabase\\ Données};
+        \node[box=orange!20] (preprocess) at (3.2,0) {\faCogs\\ Prétraitement};
+        \node[box=mlopsGreen!20] (train) at (6.4,0) {\faBrain\\ Entraînement};
+        
+        % Layer 2: MLOps
+        \node[box=purple!20] (mlflow) at (6.4,-1.8) {\faChartLine\\ MLflow};
+        
+        % Layer 3: Deployment
+        \node[box=accentCyan!20] (api) at (9.6,0) {\faServer\\ FastAPI};
+        \node[box=dockerBlue!20] (docker) at (9.6,-1.8) {\faDocker\\ Docker};
+        
+        % Layer 4: Frontend
+        \node[box=red!20] (frontend) at (12.8,0) {\faDesktop\\ Angular};
+        
+        % Arrows
+        \draw[arrow] (data) -- (preprocess);
+        \draw[arrow] (preprocess) -- (train);
+        \draw[arrow] (train) -- (api);
+        \draw[arrow] (train) -- (mlflow);
+        \draw[arrow] (api) -- (docker);
+        \draw[arrow] (api) -- (frontend);
+    \end{tikzpicture}
+    
+    \vspace{0.5cm}
+    
+    \begin{columns}
+        \column{0.25\textwidth}
+        \centering
+        \textbf{Data Pipeline}\\
+        \footnotesize NLTK, pandas\\TF-IDF
+        
+        \column{0.25\textwidth}
+        \centering
+        \textbf{ML Training}\\
+        \footnotesize scikit-learn\\Random Forest
+        
+        \column{0.25\textwidth}
+        \centering
+        \textbf{MLOps}\\
+        \footnotesize MLflow, CML\\Tracking
+        
+        \column{0.25\textwidth}
+        \centering
+        \textbf{Deployment}\\
+        \footnotesize Docker, GHCR\\FastAPI
+    \end{columns}
+\end{frame}
+
+% =============================================================================
+\section{Outils DevOps}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 6: GITHUB ACTIONS - VUE D'ENSEMBLE
+% -----------------------------------------------------------------------------
+\begin{frame}{GitHub Actions - Pipeline CI/CD}
+    \centering
+    \textbf{\faGithub\ Automatisation complète avec 3 workflows}
+    
+    \vspace{0.5cm}
+    
+    \begin{tikzpicture}[
+        node distance=0.6cm,
+        workflow/.style={draw, rounded corners, fill=#1, minimum width=4cm, minimum height=1.2cm, align=center, font=\small},
+        arrow/.style={->, thick, primaryBlue}
+    ]
+        \node[workflow=yellow!30] (push) at (0,2) {\faCodeBranch\ \texttt{git push master}};
+        
+        \node[workflow=cyan!30] (cml) at (-4.5,0) {\texttt{cml.yaml}\\ \faChartBar\ Rapport Métriques};
+        \node[workflow=dockerBlue!30] (docker) at (0,0) {\texttt{docker.yaml}\\ \faDocker\ Build \& Push};
+        \node[workflow=mlopsGreen!30] (deploy) at (4.5,0) {\texttt{deploy.yaml}\\ \faRocket\ Staging → Prod};
+        
+        \draw[arrow] (push) -- (cml);
+        \draw[arrow] (push) -- (docker);
+        \draw[arrow] (docker) -- node[above, font=\tiny] {trigger} (deploy);
+    \end{tikzpicture}
+    
+    \vspace{0.3cm}
+    
+    \begin{columns}
+        \column{0.33\textwidth}
+        \begin{block}{\footnotesize 1. CML Report}
+            \footnotesize
+            \begin{itemize}
+                \item Entraînement modèle
+                \item Génération métriques
+                \item Commentaire PR auto
+            \end{itemize}
+        \end{block}
+        
+        \column{0.33\textwidth}
+        \begin{block}{\footnotesize 2. Docker Build}
+            \footnotesize
+            \begin{itemize}
+                \item Tests pytest
+                \item Build image
+                \item Push vers GHCR
+            \end{itemize}
+        \end{block}
+        
+        \column{0.33\textwidth}
+        \begin{block}{\footnotesize 3. Deploy Pipeline}
+            \footnotesize
+            \begin{itemize}
+                \item Deploy Staging
+                \item Tests d'intégration
+                \item Deploy Production
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 7: WORKFLOW CML DÉTAILLÉ
+% -----------------------------------------------------------------------------
+\begin{frame}[fragile]{Workflow CML - Continuous Machine Learning}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{\faFileCode\ cml.yaml - Étapes clés}
+        
+        \vspace{0.3cm}
+        
+        \begin{lstlisting}[language=yaml]
+name: CML Report
+on:
+  push:
+    branches: [ master ]
+    
+jobs:
+  train-and-report:
+    steps:
+      - uses: iterative/setup-cml@v2
+      
+      - name: Preprocess Data
+        run: python src/preprocess.py
+        
+      - name: Train Model
+        run: python src/train.py
+        
+      - name: Write CML Report
+        run: |
+          cml publish reports/...
+          cml comment create report.md
+        \end{lstlisting}
+        
+        \column{0.5\textwidth}
+        \textbf{\faClipboardCheck\ Fonctionnalités CML}
+        
+        \vspace{0.3cm}
+        
+        \begin{block}{Rapport Automatique}
+            \begin{itemize}
+                \item[\faCog] Setup Python 3.9
+                \item[\faDatabase] Prétraitement données
+                \item[\faBrain] Entraînement modèle
+                \item[\faChartBar] Génération métriques JSON
+                \item[\faImage] Matrice de confusion
+                \item[\faComment] Commentaire GitHub auto
+            \end{itemize}
+        \end{block}
+        
+        \vspace{0.3cm}
+        
+        \begin{alertblock}{\footnotesize Outil: iterative/cml}
+            \footnotesize Permet de publier des rapports ML directement dans les Pull Requests GitHub
+        \end{alertblock}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 8: WORKFLOW DOCKER DÉTAILLÉ
+% -----------------------------------------------------------------------------
+\begin{frame}[fragile]{Workflow Docker - Build \& Push}
+    \begin{columns}
+        \column{0.48\textwidth}
+        \textbf{\faDocker\ docker.yaml - Pipeline}
+        
+        \vspace{0.2cm}
+        
+        \begin{lstlisting}[language=yaml]
+name: Docker Build & Push
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    steps:
+      - name: Run tests
+        run: pytest tests/ -v
+        
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: |
+            type=sha
+            type=raw,value=latest
+        \end{lstlisting}
+        
+        \column{0.52\textwidth}
+        \textbf{\faLayerGroup\ Dockerfile Optimisé}
+        
+        \vspace{0.2cm}
+        
+        \begin{lstlisting}
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Cache des dependances
+COPY requirements.txt .
+RUN pip install --no-cache-dir \
+    -r requirements.txt
+
+# Ressources NLTK
+RUN python -c "import nltk; \
+    nltk.download('stopwords'); \
+    nltk.download('wordnet')"
+
+COPY src/ ./src/
+COPY models/ ./models/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "src.app:app", \
+     "--host", "0.0.0.0", "--port", "8000"]
+        \end{lstlisting}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 9: WORKFLOW DEPLOY DÉTAILLÉ
+% -----------------------------------------------------------------------------
+\begin{frame}{Workflow Deploy - Staging → Production}
+    \centering
+    \begin{tikzpicture}[
+        node distance=1cm,
+        stage/.style={draw, rounded corners, fill=#1, minimum width=3.5cm, minimum height=1.5cm, align=center, font=\small},
+        arrow/.style={->, thick, primaryBlue},
+        decision/.style={diamond, draw, fill=yellow!30, minimum width=1.5cm, minimum height=1cm, align=center, font=\tiny}
+    ]
+        % Trigger
+        \node[stage=githubPurple!30] (trigger) at (0,0) {\faCodeBranch\\ Docker Build Success};
+        
+        % Staging
+        \node[stage=orange!30] (staging) at (4.5,0) {\faServer\ Deploy Staging\\ \footnotesize docker run -p 8000:8000};
+        
+        % Tests
+        \node[stage=cyan!30] (tests) at (9,0) {\faVial\ Tests Intégration\\ \footnotesize curl /health, /predict};
+        
+        % Decision
+        \node[decision] (check) at (9,-2) {Accuracy\\>50\%?};
+        
+        % Production
+        \node[stage=mlopsGreen!30] (prod) at (4.5,-2) {\faRocket\ Deploy Production\\ \footnotesize Tag release};
+        
+        % Rollback
+        \node[stage=red!30] (rollback) at (12,-2) {\faUndo\ Rollback\\ \footnotesize Créer Issue};
+        
+        % Arrows
+        \draw[arrow] (trigger) -- (staging);
+        \draw[arrow] (staging) -- (tests);
+        \draw[arrow] (tests) -- (check);
+        \draw[arrow] (check) -- node[left, font=\tiny] {Oui} (prod);
+        \draw[arrow] (check) -- node[above, font=\tiny] {Non} (rollback);
+    \end{tikzpicture}
+    
+    \vspace{0.5cm}
+    
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{\footnotesize Tests d'intégration Staging}
+            \footnotesize
+            \begin{itemize}
+                \item \texttt{GET /health} → model\_loaded: true
+                \item \texttt{POST /predict} → Test prédiction
+                \item Seuil accuracy minimum : 50\%
+            \end{itemize}
+        \end{block}
+        
+        \column{0.5\textwidth}
+        \begin{alertblock}{\footnotesize Rollback Automatique}
+            \footnotesize
+            \begin{itemize}
+                \item Restauration version précédente
+                \item Création Issue GitHub automatique
+                \item Notification équipe
+            \end{itemize}
+        \end{alertblock}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 10: TESTS AUTOMATISÉS
+% -----------------------------------------------------------------------------
+\begin{frame}[fragile]{Tests Automatisés - pytest}
+    \textbf{\faVial\ Suite de tests complète exécutée dans le CI/CD}
+    
+    \vspace{0.3cm}
+    
+    \begin{columns}
+        \column{0.33\textwidth}
+        \begin{block}{\footnotesize test\_preprocess.py}
+            \footnotesize Tests du prétraitement
+            \begin{itemize}
+                \item clean\_text()
+                \item process\_text()
+                \item Gestion stopwords
+                \item Lemmatisation
+            \end{itemize}
+        \end{block}
+        
+        \column{0.33\textwidth}
+        \begin{block}{\footnotesize test\_train.py}
+            \footnotesize Tests d'entraînement
+            \begin{itemize}
+                \item Chargement données
+                \item TF-IDF vectorizer
+                \item RandomForest fit
+                \item Sauvegarde modèle
+            \end{itemize}
+        \end{block}
+        
+        \column{0.33\textwidth}
+        \begin{block}{\footnotesize test\_api.py}
+            \footnotesize Tests API FastAPI
+            \begin{itemize}
+                \item GET /health
+                \item POST /predict
+                \item POST /upload
+                \item Codes erreur
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    
+    \vspace{0.3cm}
+    
+    \begin{lstlisting}[language=bash]
+# Execution dans le workflow docker.yaml
+- name: Run tests
+  run: pytest tests/ -v --tb=short
+    \end{lstlisting}
+\end{frame}
+
+% =============================================================================
+\section{Outils MLOps}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 11: MLFLOW TRACKING
+% -----------------------------------------------------------------------------
+\begin{frame}[fragile]{MLflow - Tracking d'Expériences}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{\faChartLine\ Intégration MLflow}
+        
+        \begin{lstlisting}[language=python,basicstyle=\ttfamily\tiny]
+import mlflow
+
+mlflow.set_tracking_uri("file:./mlruns")
+mlflow.set_experiment("Text_Classification")
+
+with mlflow.start_run():
+    # Hyperparametres
+    mlflow.log_param("max_features", 5000)
+    mlflow.log_param("n_estimators", 100)
+    
+    # Metriques
+    mlflow.log_metric("accuracy", accuracy)
+    mlflow.log_metric("f1_score", f1)
+    
+    # Artefacts
+    mlflow.sklearn.log_model(model, "model")
+        \end{lstlisting}
+        
+        \column{0.5\textwidth}
+        \textbf{\faDatabase\ Éléments trackés}
+        
+        \begin{block}{\scriptsize Paramètres}
+            \scriptsize
+            \begin{itemize}
+                \item \texttt{max\_features}: 5000
+                \item \texttt{n\_estimators}: 100
+            \end{itemize}
+        \end{block}
+        
+        \begin{block}{\scriptsize Métriques}
+            \scriptsize
+            \begin{itemize}
+                \item Accuracy, Precision
+                \item Recall, F1-Score
+            \end{itemize}
+        \end{block}
+        
+        \begin{block}{\scriptsize Artefacts}
+            \scriptsize
+            \begin{itemize}
+                \item Modèle 
+                \item TF-IDF Vectorizer
+                \item Matrice de confusion
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 12: CML - REPORTING
+% -----------------------------------------------------------------------------
+\begin{frame}{CML - Continuous Machine Learning}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{\faComment\ Rapport GitHub Automatique}
+        
+        \vspace{0.3cm}
+        
+        \begin{block}{\scriptsize Contenu du rapport}
+            \scriptsize
+            \begin{enumerate}
+                \item Metriques JSON (accuracy, f1)
+                \item Rapport par classe (txt)
+                \item Matrice confusion (image)
+            \end{enumerate}
+        \end{block}
+        
+        \begin{alertblock}{\scriptsize Avantages CML}
+            \scriptsize
+            \begin{itemize}
+                \item Visibilite dans PR
+                \item Historique performances
+            \end{itemize}
+        \end{alertblock}
+        
+        \column{0.5\textwidth}
+        \centering
+        \textbf{\small Exemple de rapport}
+        
+        \vspace{0.2cm}
+        
+        \includegraphics[width=5cm]{screenshots/rapport-cml-genere.png}
+    \end{columns}
+\end{frame}
+
+% =============================================================================
+\section{Backend \& Frontend}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 13: FASTAPI BACKEND
+% -----------------------------------------------------------------------------
+\begin{frame}[fragile]{FastAPI - Backend API REST}
+    \begin{columns}
+        \column{0.48\textwidth}
+        \textbf{\faServer\ Endpoints de l'API}
+        
+        \vspace{0.2cm}
+        
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{Méthode} & \textbf{Endpoint} \\
+            \midrule
+            GET & \texttt{/health} \\
+            POST & \texttt{/predict} \\
+            POST & \texttt{/upload} \\
+            GET & \texttt{/docs} \\
+            \bottomrule
+        \end{tabular}
+        
+        \vspace{0.3cm}
+        
+        \begin{block}{\footnotesize Fonctionnalités}
+            \begin{itemize}
+                \item[\faFileAlt] Support PDF, DOCX, TXT
+                \item[\faPercent] Scores de confiance
+                \item[\faHeartbeat] Health check
+                \item[\faBook] Swagger auto (OpenAPI)
+                \item[\faGlobe] CORS configuré
+            \end{itemize}
+        \end{block}
+        
+        \column{0.52\textwidth}
+        \textbf{\faCode\ Exemple de réponse /predict}
+        
+        \vspace{0.2cm}
+        
+        \begin{lstlisting}[language=json]
+{
+  "text": "Computer graphics and...",
+  "prediction_class_id": 4,
+  "category_name": "Informatique",
+  "confidence_scores": [
+    {"name": "Informatique", "value": 0.72},
+    {"name": "Science", "value": 0.15},
+    {"name": "Commerce", "value": 0.08},
+    ...
+  ],
+  "status": "success"
+}
+        \end{lstlisting}
+        
+        \vspace{0.2cm}
+        
+        \begin{alertblock}{\footnotesize Lifespan Pattern}
+            \footnotesize Chargement du modèle au démarrage via \texttt{@asynccontextmanager}
+        \end{alertblock}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 14: ANGULAR FRONTEND
+% -----------------------------------------------------------------------------
+\begin{frame}{Angular 21 - Interface Utilisateur}
+    \centering
+    \textbf{Application Web Moderne}
+    
+    \vspace{0.1cm}
+    
+    \includegraphics[width=6cm,height=3.5cm,keepaspectratio]{screenshots/ui-demo.png}
+    
+    \vspace{0.1cm}
+    
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{\footnotesize Fonctionnalités}
+            \begin{itemize}
+                \item Saisie de texte libre
+                \item Import fichiers (PDF, DOCX, txt,md...)
+                \item Barres de classes dynamiques
+            \end{itemize}
+        \end{block}
+        
+        \column{0.5\textwidth}
+        \begin{block}{\footnotesize Technologies}
+            \begin{itemize}
+                \item Angular 21
+                \item Design moderne
+                \item HttpClient pour API
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% =============================================================================
+\section{Démonstration}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 15: DÉMO DOCKER
+% -----------------------------------------------------------------------------
+\begin{frame}[fragile]{Démonstration - Docker en Local}
+    \textbf{\faDocker\ Lancer l'application conteneurisée}
+    
+    \vspace{0.1cm}
+    
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{\scriptsize 1. Pull \& Run}
+            \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+docker pull ghcr.io/akrambenhammou-e/\
+  classification-texte-pipeline-ci-cd:latest
+docker run -d -p 8000:8000 --name app \
+  ghcr.io/.../...:latest
+            \end{lstlisting}
+        \end{block}
+        
+        \column{0.5\textwidth}
+        \begin{block}{\scriptsize 2. Tester l'API}
+            \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+# Health check
+curl http://localhost:8000/health
+
+# Prediction
+curl -X POST localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text": "GPU NVIDIA gaming"}'
+            \end{lstlisting}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 16: DÉMO LIVE
+% -----------------------------------------------------------------------------
+\begin{frame}{Démonstration Live}
+    \centering
+    
+    \begin{block}{Étapes de la démonstration}
+        \begin{enumerate}
+            \item Lancer l'API : \texttt{uvicorn src.app:app --reload}
+            \item Lancer le frontend : \texttt{cd frontend \&\& ng serve}
+            \item Ouvrir \url{http://localhost:4200}
+            \item Tester avec un article en anglais
+            \item Observer les probabilités par catégorie
+        \end{enumerate}
+    \end{block}
+    
+    \vspace{0.5cm}
+    
+    \begin{columns}
+        \column{0.33\textwidth}
+        \centering
+        \textbf{API Backend}\\
+        \url{http://localhost:8000}\\
+        \footnotesize Swagger: \texttt{/docs}
+        
+        \column{0.33\textwidth}
+        \centering
+        \textbf{Frontend Angular}\\
+        \url{http://localhost:4200}\\
+        \footnotesize Interface utilisateur
+        
+        \column{0.33\textwidth}
+        \centering
+        \textbf{MLflow UI}\\
+        \texttt{mlflow ui}\\
+        \footnotesize Port 5000
+    \end{columns}
+\end{frame}
+
+% =============================================================================
+\section{Résultats \& Métriques}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 17: MÉTRIQUES DU MODÈLE
+% -----------------------------------------------------------------------------
+\begin{frame}{Performances du Modèle}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \centering
+        \textbf{Métriques d'évaluation}
+        
+        \vspace{0.5cm}
+        
+        \begin{tabular}{lc}
+            \toprule
+            \textbf{Métrique} & \textbf{Score} \\
+            \midrule
+            Accuracy & 64\% \\
+            Precision (weighted) & 63\% \\
+            Recall (weighted) & 64\% \\
+            F1-Score (weighted) & 63\% \\
+            \bottomrule
+        \end{tabular}
+        
+        \vspace{0.5cm}
+        
+        \begin{block}{\footnotesize Configuration Modèle}
+            \begin{itemize}
+                \footnotesize
+                \item RandomForest (100 arbres)
+                \item TF-IDF (5000 features)
+                \item Train/Test: 80/20
+            \end{itemize}
+        \end{block}
+        
+        \column{0.5\textwidth}
+        \centering
+        \textbf{Matrice de Confusion}
+        
+        % Placeholder pour image
+        \includegraphics[width=5.5cm]{screenshots/confusion_matrix.png}
+    \end{columns}
+\end{frame}
+
+% =============================================================================
+\section{Conclusion}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% SLIDE 18: STACK TECHNOLOGIQUE
+% -----------------------------------------------------------------------------
+\begin{frame}{Stack Technologique Complète}
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Catégorie} & \textbf{Outils} & \textbf{Rôle} \\
+        \midrule
+        \multirow{2}{*}{\textbf{DevOps}} & GitHub Actions & CI/CD automatisé \\
+        & Docker, GHCR & Conteneurisation \\
+        \midrule
+        \multirow{2}{*}{\textbf{MLOps}} & MLflow & Tracking expériences \\
+        & CML & Rapports ML dans PR \\
+        \midrule
+        \multirow{2}{*}{\textbf{ML}} & scikit-learn & Modèle RandomForest \\
+        & NLTK, pandas & Prétraitement NLP \\
+        \midrule
+        \multirow{2}{*}{\textbf{Backend}} & FastAPI & API REST \\
+        & Uvicorn, Pydantic & Serveur ASGI \\
+        \midrule
+        \textbf{Frontend} & Angular 21 & Interface utilisateur \\
+        \midrule
+        \textbf{Tests} & pytest, httpx & Tests automatisés \\
+        \bottomrule
+    \end{tabular}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 21: CONCLUSION
+% -----------------------------------------------------------------------------
+\begin{frame}{Conclusion \& Perspectives}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{\faCheckCircle\ Réalisations}
+            \begin{itemize}
+                \item Pipeline \textbf{CI/CD complet}
+                    \begin{itemize}
+                        \footnotesize
+                        \item 3 workflows GitHub Actions
+                        \item Tests automatisés (pytest)
+                        \item Rollback automatique
+                    \end{itemize}
+                \item \textbf{MLOps} intégré
+                    \begin{itemize}
+                        \footnotesize
+                        \item MLflow tracking
+                        \item CML reporting
+                    \end{itemize}
+                \item \textbf{Déploiement} Docker
+                    \begin{itemize}
+                        \footnotesize
+                        \item Image optimisée
+                        \item GitHub Container Registry
+                    \end{itemize}
+            \end{itemize}
+        \end{block}
+        
+        \column{0.5\textwidth}
+        \begin{alertblock}{\faRocket\ Améliorations possibles}
+            \begin{itemize}
+                \item \textbf{Modèle}
+                    \begin{itemize}
+                        \footnotesize
+                        \item Deep Learning (BERT)
+                        \item Support multilingue
+                    \end{itemize}
+                \item \textbf{Infrastructure}
+                    \begin{itemize}
+                        \footnotesize
+                        \item Kubernetes (scaling)
+                        \item Prometheus (monitoring)
+                    \end{itemize}
+                \item \textbf{MLOps avancé}
+                    \begin{itemize}
+                        \footnotesize
+                        \item A/B Testing
+                        \item Feature Store
+                        \item Model Registry
+                    \end{itemize}
+            \end{itemize}
+        \end{alertblock}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 20: QUESTIONS
+% -----------------------------------------------------------------------------
+\begin{frame}[plain]
+    \centering
+    
+    \vspace{2cm}
+    
+    {\Huge \textbf{Merci de votre attention !}}
+    
+    \vspace{1cm}
+    
+    {\Large \faQuestionCircle\ Questions ?}
+    
+    \vspace{1.5cm}
+    
+    \begin{tabular}{cc}
+        \faGithub\ & \url{github.com/AkramBENHAMMOU-e/Classification-Texte-Pipeline-CI-CD} \\
+    \end{tabular}
+    
+    \vspace{1cm}
+    
+    \textit{Akram BENHAMMOU \& Oussama KHOUYA}\\
+    \small Master 2 - AI \& Systemes distrubués
+\end{frame}
+
+\end{document}
